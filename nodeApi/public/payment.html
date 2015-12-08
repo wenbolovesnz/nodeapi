@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<form id="checkout" method="post" action="/checkout">
+    <div id="payment-form"></div>
+    <input type="submit" value="Pay $10">
+</form>
+
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://js.braintreegateway.com/v2/braintree.js"></script>
+<script>
+    setTimeout(function(){
+        $.ajax({
+            method: "GET",
+            url: "client_token"
+        }).done(function(token) {
+            braintree.setup(token, "dropin", {
+                container: "payment-form",
+                paypal: {
+                    amount: 20.00
+                }
+            });
+        });
+    }, 3000);
+</script>
+
+</body>
+</html>
