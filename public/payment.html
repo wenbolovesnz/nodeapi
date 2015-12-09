@@ -20,14 +20,23 @@
             method: "GET",
             url: "client_token"
         }).done(function(token) {
+
             braintree.setup(token, "dropin", {
                 container: "payment-form",
-                paypal: {
-                    amount: 20.00
+                onPaymentMethodReceived: function(nonce, type, details){
+                    console.log(nonce);
+                    $.ajax({
+                        method: "POST",
+                        url: "checkout",
+                        data: nonce
+                    }).done(function(data){
+                        console.log(data);
+                    });
                 }
             });
+
         });
-    }, 3000);
+    }, 1000);
 </script>
 
 </body>

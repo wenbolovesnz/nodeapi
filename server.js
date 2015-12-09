@@ -2,6 +2,11 @@ var express = require('express');
 var app = express();
 var path = require('path');
 var braintree = require("braintree");
+var bodyParser = require("body-parser");
+
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 require('./database.js');
 var Product = require('./models/product.js');
@@ -31,10 +36,15 @@ app.get("/client_token", function (req, res) {
 });
 
 app.post("/checkout", function (req, res) {
-	var nonce = req.body.payment_method_nonce;
-	console.log(nonce);
-	res.send('ok');
-	// Use payment method nonce here
+	var nonce = req.body.nonce;
+	gateway.transaction.sale({
+		amount: '20.00',
+		paymentMethodNonce: nonce,
+	}, function (err, result) {
+		console.log(result);
+		res.send(result);
+	});
+
 });
 
 var port = process.env.PORT || 1337;
